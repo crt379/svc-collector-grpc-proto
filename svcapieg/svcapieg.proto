@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+option go_package = "github.com/crt379/svc-collector-grpc-proto/svcapieg";
+
+package service.collector.svcapieg;
+
+import public "google/protobuf/timestamp.proto";
+import public "google/api/annotations.proto";
+// import public "google/protobuf/wrappers.proto";
+// import "anypb/anypb.proto";
+
+service Svcapieg {
+    rpc Create(CreateRequest) returns (CreateReply) {
+        option (google.api.http) = {
+            post: "/api/services/{service_id}/svcapis/{svcapi_id}/egs"
+            body: "data"
+        };
+    }
+    rpc Get(GetRequest) returns (GetReply) {
+        option (google.api.http) = {
+            get: "/api/services/{service_id}/svcapis/{svcapi_id}/egs"
+            additional_bindings {
+                get: "/api/services/{service_id}/svcapis/{svcapi_id}/egs/{uuid}"
+            }
+        };
+    }
+    rpc Delete(DeleteRequest) returns (DeleteReply) {
+        option (google.api.http) = {
+            delete: "/api/services/{service_id}/svcapis/{svcapi_id}/egs/{uuid}"
+        };
+    }
+    rpc Update(UpdateRequest) returns (UpdateReply) {
+        option (google.api.http) = {
+            patch: "/api/services/{service_id}/svcapis/{svcapi_id}/egs/{uuid}"
+            body: "data"
+        };
+    }
+}
+
+message SvcapiegMeta {
+    int32 uuid = 1;
+    string data = 2;
+    // bytes data = 2;
+    // google.protobuf.BytesValue data = 2;
+    // service.collector.anypb.Any data = 2;
+    google.protobuf.Timestamp create_time = 3;
+    google.protobuf.Timestamp update_time = 4;
+    int32 svcapi_id = 5;
+    // int32 service_id = 6;
+    int32 tenant_id = 7;
+}
+
+message CreateRequest {
+    int32 service_id = 1;
+    int32 svcapi_id = 2;
+    string data = 3;
+    // bytes data = 3;
+    // google.protobuf.BytesValue data = 3;
+    // service.collector.anypb.Any data = 3;
+}
+
+message CreateReply {
+    int32 code = 1;
+    string message = 2;
+    SvcapiegMeta svcapieg = 3;
+}
+
+message GetRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    int32 service_id = 3;
+    int32 svcapi_id = 4;
+    int32 uuid = 5;
+}
+
+message GetReply {
+    int32 code = 1;
+    string message = 2;
+    repeated SvcapiegMeta svcapiegs = 3;
+    int32 count = 4;
+    int32 total = 5;
+    int32 page = 6;
+    int32 limit = 7;
+}
+
+message DeleteRequest {
+    int32 service_id = 1;
+    int32 svcapi_id = 2;
+    int32 uuid = 3;
+}
+
+message DeleteReply {
+    int32 code = 1;
+    string message = 2;
+}
+
+message UpdateRequest {
+    int32 service_id = 1;
+    int32 svcapi_id = 2;
+    int32 uuid = 3;
+    string data = 4;
+    // bytes data = 4;
+    // google.protobuf.BytesValue data = 4;
+    // service.collector.anypb.Any data = 4;
+}
+
+message UpdateReply {
+    int32 code = 1;
+    string message = 2;
+    SvcapiegMeta svcapieg = 3;
+}

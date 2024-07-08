@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+option go_package = "github.com/crt379/svc-collector-grpc-proto/appsvc";
+
+package service.collector.appsvc;
+
+import public "google/protobuf/timestamp.proto";
+import public "google/api/annotations.proto";
+
+import "service/service.proto";
+
+service Appsvc {
+    rpc Create(CreateRequest) returns (CreateReply) {
+        option (google.api.http) = {
+            post: "/api/applications/{appid}/appsvcs"
+            body: "body"
+        };
+    }
+    rpc Get(GetRequest) returns (GetReply) {
+        option (google.api.http) = {
+            get: "/api/applications/{appid}/appsvcs"
+            additional_bindings {
+                get: "/api/applications/{appid}/appsvcs/{uuid}"
+            }
+        };
+    }
+    rpc Delete(DeleteRequest) returns (DeleteReply) {
+        option (google.api.http) = {
+            delete: "/api/applications/{appid}/appsvcs/{uuid}"
+        };
+    }
+}
+
+message AppsvcMeta {
+    int32 uuid = 1;
+    int32 appid = 2;
+    int32 svcid = 3;
+    google.protobuf.Timestamp create_time = 4;
+    google.protobuf.Timestamp update_time = 5;
+    service.ServiceMeta service = 6;
+}
+
+message CreateRequest {
+    int32 appid = 1;
+    Body body = 2;
+
+    message Body {
+        int32 service_id = 1;
+    }
+}
+
+message CreateReply {
+    int32 code = 1;
+    string message = 2;
+    AppsvcMeta appsvc = 3;
+}
+
+message GetRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    int32 appid = 3;
+    int32 uuid = 4;
+    int32 svcid = 5;
+    string svcname = 6;
+}
+
+message GetReply {
+    int32 code = 1;
+    string message = 2;
+    repeated AppsvcMeta appsvcs = 3;
+    int32 count = 4;
+    int32 total = 5;
+    int32 page = 6;
+    int32 limit = 7;
+}
+
+message DeleteRequest {
+    int32 appid = 1;
+    int32 uuid = 2;
+}
+
+message DeleteReply {
+    int32 code = 1;
+    string message = 2;
+}

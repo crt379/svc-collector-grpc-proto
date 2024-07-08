@@ -1,0 +1,236 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "register/register.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Register"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/registers": {
+      "get": {
+        "operationId": "Register_GetRegister",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/registerGetRegisterReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "service",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "address",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Register"
+        ]
+      },
+      "post": {
+        "operationId": "Register_Register",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/registerRegisterReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/registerRegisterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Register"
+        ]
+      }
+    },
+    "/api/unregisters": {
+      "post": {
+        "operationId": "Register_Unregister",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/registerUnregisterReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/registerUnregisterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Register"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "registerGetRegisterReply": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "infos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/registerRegisterInfo"
+          }
+        }
+      }
+    },
+    "registerRegisterInfo": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      }
+    },
+    "registerRegisterReply": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "info": {
+          "$ref": "#/definitions/registerRegisterInfo"
+        }
+      }
+    },
+    "registerRegisterRequest": {
+      "type": "object",
+      "properties": {
+        "verify": {
+          "type": "string",
+          "title": "校验字段，防止gw转到非预期服务上"
+        },
+        "service": {
+          "type": "string"
+        }
+      }
+    },
+    "registerUnregisterReply": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "infos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/registerRegisterInfo"
+          }
+        }
+      }
+    },
+    "registerUnregisterRequest": {
+      "type": "object",
+      "properties": {
+        "verify": {
+          "type": "string",
+          "title": "校验字段，防止gw转到非预期服务上"
+        },
+        "service": {
+          "type": "string"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

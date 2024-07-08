@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+option go_package = "github.com/crt379/svc-collector-grpc-proto/tenant";
+
+package service.collector.tenant;
+
+import public "google/protobuf/timestamp.proto";
+import public "google/api/annotations.proto";
+
+service Tenant {
+    rpc Create(CreateRequest) returns (CreateReply) {
+        option (google.api.http) = {
+            post: "/api/tenants"
+            body: "*"
+        };
+    }
+    rpc Get(GetRequest) returns (GetReply) {
+        option (google.api.http) = {
+            get: "/api/tenants"
+            additional_bindings {
+                get: "/api/tenants/{uuid}"
+            }
+        };
+    }
+    rpc Delete(DeleteRequest) returns (DeleteReply) {
+        option (google.api.http) = {
+            delete: "/api/tenants/{uuid}"
+        };
+    }
+    rpc Update(UpdateRequest) returns (UpdateReply) {
+        option (google.api.http) = {
+            patch: "/api/tenants/{uuid}"
+            body: "*"
+        };
+    }
+}
+
+message TenantMeta {
+    int32 uuid = 1;
+    string name = 2;
+    string describe = 3;
+    google.protobuf.Timestamp create_time = 4;
+    google.protobuf.Timestamp update_time = 5;
+}
+
+message CreateRequest {
+    string name = 1;
+    string describe = 2;
+}
+
+message CreateReply {
+    int32 code = 1;
+    string message = 2;
+    TenantMeta tenant = 3;
+}
+
+message GetRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    int32 uuid = 3;
+    string name = 4;
+}
+
+message GetReply {
+    int32 code = 1;
+    string message = 2;
+    repeated TenantMeta tenants = 3;
+    int32 count = 4;
+    int32 total = 5;
+    int32 page = 6;
+    int32 limit = 7;
+}
+
+message DeleteRequest {
+    int32 uuid = 1;
+}
+
+message DeleteReply {
+    int32 code = 1;
+    string message = 2;
+}
+
+message UpdateRequest {
+    int32 uuid = 1;
+    string name = 2;
+    string describe = 3;
+}
+
+message UpdateReply {
+    int32 code = 1;
+    string message = 2;
+    TenantMeta tenant = 3;
+}

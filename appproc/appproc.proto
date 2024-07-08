@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option go_package = "github.com/crt379/svc-collector-grpc-proto/appproc";
+
+package service.collector.appproc;
+
+import "application/application.proto";
+import "processor/processor.proto";
+
+import public "google/protobuf/wrappers.proto";
+
+service Appproc {
+    rpc Get(GetRequest) returns (GetReply) {
+        option (google.api.http) = {
+            get: "/api/appprocs"
+        };
+    }
+}
+
+message AppprocMeta {
+    application.ApplicationMete application = 1;
+    repeated processor.ProcessorMeta processors = 2;
+}
+
+message GetRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    int32 appid = 3;
+    string appname = 4;
+    google.protobuf.Int32Value weight = 5; 
+    string state = 6;
+}
+
+message GetReply {
+    int32 code = 1;
+    string message = 2;
+    repeated AppprocMeta appprocs = 3;
+    int32 count = 4;
+    int32 total = 5;
+    int32 page = 6;
+    int32 limit = 7;
+}

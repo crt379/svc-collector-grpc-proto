@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option go_package = "github.com/crt379/svc-collector-grpc-proto/appapi";
+
+package service.collector.appapi;
+
+import "service/service.proto";
+import "svcapi/svcapi.proto";
+import "application/application.proto";
+
+service Appapi {
+    rpc Get(GetRequest) returns (GetReply) {
+        option (google.api.http) = {
+            get: "/api/appapis"
+            additional_bindings {
+                get: "/api/applications/{appid}/appapis";
+            }
+            additional_bindings {
+                get: "/api/applications/{appid}/appsvcs/{appsvcid}/appapis"
+            }
+        };
+    }
+}
+
+message AppapiMeta {
+    application.ApplicationMete application = 1;
+    service.ServiceMeta service = 2;
+    repeated svcapi.SvcapiMeta svcapis = 3;
+}
+
+message GetRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    int32 appid = 3;
+    string appname = 4;
+    int32 appsvcid = 5;
+    int32 svcid = 6; 
+    string svcname = 7;
+}
+
+message GetReply {
+    int32 code = 1;
+    string message = 2;
+    repeated AppapiMeta appapis = 3;
+    int32 count = 4;
+    int32 total = 5;
+    int32 page = 6;
+    int32 limit = 7;
+}

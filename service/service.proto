@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+option go_package = "github.com/crt379/svc-collector-grpc-proto/service";
+
+package service.collector.service;
+
+import public "google/protobuf/timestamp.proto";
+import public "google/api/annotations.proto";
+
+service Service {
+    rpc Create(CreateRequest) returns (CreateReply) {
+        option (google.api.http) = {
+            post: "/api/services"
+            body: "*"
+        };
+    }
+    rpc Get(GetRequest) returns (GetReply) {
+        option (google.api.http) = {
+            get: "/api/services"
+            additional_bindings {
+                get: "/api/services/{uuid}"
+            }
+        };
+    }
+    rpc Delete(DeleteRequest) returns (DeleteReply) {
+        option (google.api.http) = {
+            delete: "/api/services/{uuid}"
+        };
+    }
+    rpc Update(UpdateRequest) returns (UpdateReply) {
+        option (google.api.http) = {
+            patch: "/api/services/{uuid}"
+            body: "*"
+        };
+    }
+}
+
+message ServiceMeta {
+    int32 uuid = 1;
+    string name = 2;
+    string describe = 3;
+    google.protobuf.Timestamp create_time = 4;
+    google.protobuf.Timestamp update_time = 5;
+    int32 tenant_id = 6;
+}
+
+message CreateRequest {
+    string name = 1;
+    string describe = 2;
+}
+
+message CreateReply {
+    int32 code = 1;
+    string message = 2;
+    ServiceMeta service = 3;
+}
+
+message GetRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    int32 uuid = 3;
+    string name = 4;
+}
+
+message GetReply {
+    int32 code = 1;
+    string message = 2;
+    repeated ServiceMeta services = 3;
+    int32 count = 4;
+    int32 total = 5;
+    int32 page = 6;
+    int32 limit = 7;
+}
+
+message DeleteRequest {
+    int32 uuid = 1;
+}
+
+message DeleteReply {
+    int32 code = 1;
+    string message = 2;
+}
+
+message UpdateRequest {
+    int32 uuid = 1;
+    string name = 2;
+    string describe = 3;
+}
+
+message UpdateReply {
+    int32 code = 1;
+    string message = 2;
+    ServiceMeta service = 3;
+}

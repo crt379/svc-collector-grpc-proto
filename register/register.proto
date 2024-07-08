@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+option go_package = "github.com/crt379/svc-collector-grpc-proto/register";
+
+package service.collector.register;
+
+import public "google/api/annotations.proto";
+
+service Register {
+    rpc Register(RegisterRequest) returns (RegisterReply) {
+        option (google.api.http) = {
+            post: "/api/registers"
+            body: "*"
+        };
+    }
+    rpc GetRegister(GetRegisterRequest) returns (GetRegisterReply) {
+        option (google.api.http) = {
+            get: "/api/registers"
+        };
+    }
+    rpc Unregister(UnregisterRequest) returns (UnregisterReply) {
+        option (google.api.http) = {
+            post: "/api/unregisters"
+            body: "*"
+        };
+    }
+}
+
+message RegisterInfo {
+    string service = 1;
+    string address = 2;
+}
+
+message RegisterRequest {
+    string verify = 1; // 校验字段，防止gw转到非预期服务上
+    string service = 2;
+}
+
+message RegisterReply {
+    int32 code = 1;
+    string message = 2;
+    RegisterInfo info = 3;
+}
+
+message GetRegisterRequest {
+    string service = 1;
+    string address = 2;
+}
+
+message GetRegisterReply {
+    int32 code = 1;
+    string message = 2;
+    repeated RegisterInfo infos = 3;
+}
+
+message UnregisterRequest {
+    string verify = 1; // 校验字段，防止gw转到非预期服务上
+    string service = 2;
+}
+
+message UnregisterReply {
+    int32 code = 1;
+    string message = 2;
+    repeated RegisterInfo infos = 3;
+}

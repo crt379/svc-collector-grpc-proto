@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+option go_package = "github.com/crt379/svc-collector-grpc-proto/processor";
+
+package service.collector.processor;
+
+import public "google/protobuf/timestamp.proto";
+import public "google/api/annotations.proto";
+
+service Processor {
+    rpc Create(CreateRequest) returns (CreateReply) {
+        option (google.api.http) = {
+            post: "/api/applications/{appid}/processors"
+            body: "*"
+        };
+    }
+    rpc Get(GetRequest) returns (GetReply) {
+        option (google.api.http) = {
+            get: "/api/applications/{appid}/processors"
+            additional_bindings {
+                get: "/api/applications/{appid}/processors/{uuid}"
+            }
+        };
+    }
+    rpc Delete(DeleteRequest) returns (DeleteReply) {
+        option (google.api.http) = {
+            delete: "/api/applications/{appid}/processors/{uuid}"
+        };
+    }
+    rpc Update(UpdateRequest) returns (UpdateReply) {
+        option (google.api.http) = {
+            patch: "/api/applications/{appid}/processors/{uuid}"
+            body: "*"
+        };
+    }
+}
+
+message ProcessorMeta {
+    int32 uuid = 1;
+    string addr = 2;
+    int32 weight = 3;
+    string state = 4;
+    google.protobuf.Timestamp create_time = 5;
+    google.protobuf.Timestamp update_time = 6;
+    int32 appid = 7;
+    int32 tenant_id = 8; 
+}
+
+message CreateRequest {
+    int32 appid = 1;
+    string addr = 2;
+    int32 weight = 3;
+    string state = 4;
+}
+
+message CreateReply {
+    int32 code = 1;
+    string message = 2;
+    ProcessorMeta processor = 3;
+}
+
+message GetRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    int32 appid = 3;
+    int32 uuid = 4;
+    string addr = 5;
+    int32 weight = 6;
+    string state = 7;
+}
+
+message GetReply {
+    int32 code = 1;
+    string message = 2;
+    repeated ProcessorMeta processors = 3;
+    int32 count = 4;
+    int32 total = 5;
+    int32 page = 6;
+    int32 limit = 7;
+}
+
+message DeleteRequest {
+    int32 appid = 1;
+    int32 uuid = 2;
+}
+
+message DeleteReply {
+    int32 code = 1;
+    string message = 2;
+}
+
+message UpdateRequest {
+    int32 appid = 1;
+    int32 uuid = 2;
+    string addr = 3;
+    int32 weight = 4;
+    string state = 5;
+}
+
+message UpdateReply {
+    int32 code = 1;
+    string message = 2;
+    ProcessorMeta processor = 3;
+}
