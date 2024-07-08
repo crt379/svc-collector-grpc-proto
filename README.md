@@ -1,5 +1,2 @@
-### git set
+# svc-collector-grpc-proto
 
-git config --local user.email "chenrtang@gmail.com"
-
-git config --local user.name "crt"
